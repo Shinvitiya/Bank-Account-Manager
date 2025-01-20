@@ -46,17 +46,20 @@ public:
     }
 
     void withdrawMoney(double amount) {
-        balance -= amount;
-
-        cout << endl;
-        cout << "Withdraw Successful" << endl;
-        cout << "Your Balance is $" << balance << endl;
+        if(balance >= amount){
+            balance -= amount;
+            cout << endl << "Withdraw Successful" << endl;
+            cout << "Your Balance is $" << balance << endl;
+        }else{
+            cout << endl << "Unable to make withdrawal. Insufficient balance" << endl;
+        }
+        
 
         return;
     }
 
     void transferMoney(Account& transferAccount, double amount) {
-        if(balance - amount >= 0) {
+        if(balance >= amount) {
             balance -= amount;
             transferAccount.balance += amount;
 
@@ -99,6 +102,8 @@ void createAccount(vector<Account>& accounts) {
     cin >> name;
     cout << endl;
 
+    //Imlplement Logic for different account types
+
     if (accounts.empty()) {
         accountNumber = 1000;
     } else {
@@ -111,20 +116,86 @@ void createAccount(vector<Account>& accounts) {
     accounts.back().getAccountDetails();
 }
 
-void viewAccountDetails() {
-    // Function logic to view account details
+void viewAccountDetails(vector<Account>& accounts) {
+    int accountNumber;
+    cout << endl << "Enter your account number: ";
+    cin >> accountNumber;
+
+    for(Account account : accounts){
+        if(account.accountNumber == accountNumber){
+            account.getAccountDetails();
+            return;
+        }
+    }
+
+    cout << "Invalid Account Number\n";
+    return;
+
 }
 
-void depositMoney() {
-    // Function logic to deposit money
+void depositMoney(vector<Account>& accounts) {
+    int accountNumber;
+    int depositAmount;
+    cout << endl << "Enter your account number: ";
+    cin >> accountNumber;
+
+    for(Account& account : accounts){
+        if(account.accountNumber == accountNumber){
+            cout << "Enter Amount to deposit: ";
+            cin >> depositAmount;
+            account.depositMoney(depositAmount);
+            return;
+        }
+    }
+    cout << "Invalid Account Number\n";
+    return;
 }
 
-void withdrawMoney() {
-    // Function logic to withdraw money
+void withdrawMoney(vector<Account>& accounts) {
+    int accountNumber;
+    int withdrawAmount;
+    cout << endl << "Enter your account number: ";
+    cin >> accountNumber;
+
+    for(Account& account : accounts){
+        if(account.accountNumber == accountNumber){
+            cout << "Enter Amount to withdraw: ";
+            cin >> withdrawAmount;
+            account.withdrawMoney(withdrawAmount);
+            return;
+        }
+    }
+    cout << "Invalid Account Number\n";
+    return;
 }
 
-void transferMoney() {
-    // Function logic to transfer money
+void transferMoney(vector<Account>& accounts) {
+    int myAccountNumber;
+    int recieverAccountNumber;
+    double transferAmount;
+
+    cout << endl << "Enter your account number: ";
+    cin >> myAccountNumber;
+
+    cout << endl << "Enter receiver's account number: ";
+    cin >> recieverAccountNumber;
+
+    for(Account& account : accounts){
+        if(account.accountNumber == myAccountNumber){
+            for(Account& reciverAccount: accounts){
+                if(reciverAccount.accountNumber == recieverAccountNumber){
+                    cout << "Enter Amount to transfer: ";
+                    cin >> transferAmount;
+                    account.transferMoney(reciverAccount, transferAmount);
+                    return;
+                }
+            }
+            cout << "Receiver's account number is invalid.\n";
+            return;
+        }
+    }
+    cout << "Your Account Number is invalid\n";
+    return;
 }
 
 int main() {
@@ -148,19 +219,20 @@ int main() {
                 createAccount(accounts);
                 break;
             case 2:
-                viewAccountDetails();
+                viewAccountDetails(accounts);
                 break;
             case 3:
-                depositMoney();
+                depositMoney(accounts);
                 break;
             case 4:
-                withdrawMoney();
+                withdrawMoney(accounts);
                 break;
             case 5:
-                transferMoney();
+                transferMoney(accounts);
                 break;
             case 6:
                 cout << "Exiting the system. Goodbye!" << endl;
+                cout << "--------------------------------------------\n\n";
                 break;
         }
     } while (choice != 6);
