@@ -1,0 +1,5 @@
+# Ignore VSCode settings directory
+.vscode/
+
+# Ignore a.out (common output file for compiled programs)
+a.out
