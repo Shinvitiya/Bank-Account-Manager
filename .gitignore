@@ -4,4 +4,4 @@
 # Ignore a.out (common output file for compiled programs)
 a.out
 
-./gitignore
+.gitignore
